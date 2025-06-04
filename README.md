@@ -70,7 +70,7 @@ O **SafeNet AI** é uma solução inteligente que utiliza sensores embarcados co
 - Baixo custo e fácil escalabilidade
 - Solução conectada e adaptável a qualquer região
 - Pensado para segurança e acessibilidade em situações críticas
-- linhado aos ODS da ONU (Objetivos de Desenvolvimento Sustentável)
+- Alinhado aos ODS da ONU (Objetivos de Desenvolvimento Sustentável)
 
 ---
 
