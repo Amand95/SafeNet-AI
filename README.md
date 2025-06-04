@@ -2,7 +2,7 @@
   <img src="https://github.com/Amand95/SafeNet-AI/blob/6d1e324affc86a5ccf37fb3ee8041588bd78a7a3/SafeNet%20logo.png?raw=true" alt="SafeNet AI Logo" width="300"/>
 </p>
 
-# 🛡️ SafeNet AI – Sistema Inteligente de Monitoramento de Desastres Naturais 
+# SafeNet AI – Sistema Inteligente de Monitoramento de Desastres Naturais 
 
 ## Visão Geral
 
