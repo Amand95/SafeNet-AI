@@ -44,6 +44,13 @@ O **SafeNet AI** é uma solução inteligente que utiliza sensores embarcados co
 - Acesso via desktop ou mobile (responsivo).
 
 ---
+#### Simulação no Wokwi
+
+Você pode testar a simulação do circuito ESP32 com DHT22 clicando no link abaixo:
+
+[Simulação Wokwi - ESP32 com DHT22](https://wokwi.com/projects/432958048477552641)
+
+---
 
 ## 🛠️ Tecnologias Utilizadas
 
