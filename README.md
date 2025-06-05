@@ -82,7 +82,7 @@ O **SafeNet AI** é uma solução inteligente que utiliza sensores embarcados co
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/safenet-ai.git
+   git clone https://github.com/Amand95/SafeNet-AI.git
    cd safenet-ai
 
 
