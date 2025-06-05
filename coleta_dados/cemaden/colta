@@ -1,0 +1,59 @@
+import requests
+import pdfplumber
+import pandas as pd
+import os
+
+PDF_URL = 'https://www.gov.br/cemaden/pt-br/assuntos/monitoramento/monitoramento-de-seca-para-o-brasil/monitoramento-de-secas-e-impactos-no-brasil-2013-maio-2025/@@download/file/Monitoramento_Seca_Maio_2025.pdf'
+PDF_FILE = 'Monitoramento_Seca_Maio_2025.pdf'
+PASTA_SAIDA = 'tabelas_extraidas'
+
+def baixar_pdf(url: str, nome_arquivo: str):
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        with open(nome_arquivo, 'wb') as f:
+            f.write(response.content)
+        print("✅ PDF baixado com sucesso!")
+    except Exception as e:
+        print(f"❌ Erro ao baixar PDF: {e}")
+
+def extrair_todas_tabelas(nome_arquivo: str):
+    try:
+        with pdfplumber.open(nome_arquivo) as pdf:
+            todas_tabelas = []
+            for i, page in enumerate(pdf.pages):
+                tables = page.extract_tables()
+                if tables:
+                    for idx, table in enumerate(tables):
+                        df = pd.DataFrame(table[1:], columns=table[0])  # primeira linha como header
+                        todas_tabelas.append((i+1, idx+1, df))
+            return todas_tabelas
+    except Exception as e:
+        print(f"❌ Erro ao extrair tabelas do PDF: {e}")
+        return []
+
+def salvar_tabelas(tabelas: list, pasta_saida: str):
+    if not os.path.exists(pasta_saida):
+        os.makedirs(pasta_saida)
+    dfs = []
+    for pagina, idx, df in tabelas:
+        nome_arquivo = f'tabela_p{pagina}_t{idx}.csv'
+        caminho = os.path.join(pasta_saida, nome_arquivo)
+        df.to_csv(caminho, index=False)
+        print(f"✅ Tabela salva: {caminho}")
+        dfs.append(df)
+    if dfs:
+        df_geral = pd.concat(dfs, ignore_index=True)
+        geral_path = os.path.join(pasta_saida, 'todas_tabelas_concatenadas.csv')
+        df_geral.to_csv(geral_path, index=False)
+        print(f"✅ Todas as tabelas concatenadas salvas em: {geral_path}")
+    else:
+        print("⚠️ Nenhuma tabela para salvar.")
+
+def main():
+    baixar_pdf(PDF_URL, PDF_FILE)
+    tabelas = extrair_todas_tabelas(PDF_FILE)
+    salvar_tabelas(tabelas, PASTA_SAIDA)
+
+if __name__ == "__main__":
+    main()
