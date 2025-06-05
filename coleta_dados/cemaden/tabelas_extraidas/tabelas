@@ -1,0 +1,71 @@
+"""
+Script para baixar e extrair dados do relatório de monitoramento de seca do CEMADEN (maio 2025).
+
+- Baixa o PDF automaticamente.
+- Extrai texto e tabelas.
+- Salva em arquivos CSV e TXT para análise.
+
+import requests
+import pdfplumber
+import pandas as pd
+import os
+
+PDF_URL = 'https://www.gov.br/cemaden/pt-br/assuntos/monitoramento/monitoramento-de-seca-para-o-brasil/monitoramento-de-secas-e-impactos-no-brasil-2013-maio-2025/@@download/file/Monitoramento_Seca_Maio_2025.pdf'
+PDF_FILE = 'Monitoramento_Seca_Maio_2025.pdf'
+PASTA_CSV = 'tabelas_extraidas/'
+
+def baixar_pdf(url: str, nome_arquivo: str):
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        with open(nome_arquivo, 'wb') as f:
+            f.write(response.content)
+        print("✅ PDF baixado com sucesso!")
+    except Exception as e:
+        print(f"❌ Erro ao baixar PDF: {e}")
+
+def extrair_texto_e_tabelas(nome_arquivo: str):
+    try:
+        with pdfplumber.open(nome_arquivo) as pdf:
+            all_text = ""
+            tables = []
+            for i, page in enumerate(pdf.pages):
+                text = page.extract_text()
+                if text:
+                    all_text += f"\n--- Página {i+1} ---\n" + text
+
+                table = page.extract_table()
+                if table:
+                    tables.append(table)
+        return all_text, tables
+    except Exception as e:
+        print(f"❌ Erro ao extrair dados do PDF: {e}")
+        return None, None
+
+def salvar_arquivos(texto: str, tabelas: list):
+    if texto:
+        with open('texto_monitoramento.txt', 'w', encoding='utf-8') as f:
+            f.write(texto)
+        print("✅ Texto extraído e salvo em 'texto_monitoramento.txt'.")
+    else:
+        print("⚠️ Texto vazio, não foi salvo.")
+
+    if tabelas and len(tabelas) > 0:
+        # Cria pasta se não existir
+        if not os.path.exists(PASTA_CSV):
+            os.makedirs(PASTA_CSV)
+        df = pd.DataFrame(tabelas[0][1:], columns=tabelas[0][0])
+        caminho_csv = os.path.join(PASTA_CSV, 'monitoramento_seca.csv')
+        df.to_csv(caminho_csv, index=False)
+        print(f"✅ Primeira tabela salva como '{caminho_csv}'.")
+    else:
+        print("⚠️ Nenhuma tabela encontrada para salvar.")
+
+def main():
+    baixar_pdf(PDF_URL, PDF_FILE)
+    texto, tabelas = extrair_texto_e_tabelas(PDF_FILE)
+    salvar_arquivos(texto, tabelas)
+
+if __name__ == "__main__":
+    main()
+
