@@ -1,17 +1,24 @@
-# Coleta de Dados CEMADEN
+# Coleta de Dados - Monitoramento de Seca CEMADEN
 
-Este diretório contém o script para coleta automática dos dados do relatório de monitoramento de seca do CEMADEN (maio 2025).
+Este script automatiza a coleta, extração e armazenamento de dados do relatório de monitoramento de seca do CEMADEN (maio 2025).  
 
-## Arquivos
+Os dados são obtidos diretamente do PDF oficial, baixado automaticamente, e convertidos em texto e tabelas CSV para facilitar análises futuras.
 
-- `coleta_seca_cemaden.py`: Script Python que baixa o PDF oficial do CEMADEN, extrai todas as tabelas presentes, e salva cada tabela em CSV dentro da pasta `tabelas_extraidas/`. Também gera um CSV concatenado com todas as tabelas extraídas.
+---
 
-- `tabelas_extraidas/`: Diretório onde os arquivos CSV extraídos são salvos (recomenda-se adicionar esta pasta ao `.gitignore` para evitar subir arquivos grandes no repositório).
+## Estrutura dos arquivos
 
-## Como usar
+- `coleta_seca_cemaden.py` — Script principal que baixa o PDF, extrai texto e tabelas, e salva os dados localmente.
+- `texto_monitoramento.txt` — Texto extraído do relatório (gerado após execução do script).
+- `tabelas_extraidas/` — Pasta que contém os arquivos CSV das tabelas extraídas do PDF.
 
-1. Certifique-se de ter as dependências instaladas:
+---
 
-```bash
-pip install requests pdfplumber pandas
+## Requisitos
+
+- Python 3.7 ou superior  
+- Bibliotecas Python:
+  ```bash
+  pip install requests pdfplumber pandas
+
 
