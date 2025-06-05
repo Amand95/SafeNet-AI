@@ -9,8 +9,8 @@ Os dados são obtidos diretamente do PDF oficial, baixado automaticamente, e con
 ## Estrutura dos arquivos
 
 - `coleta_seca_cemaden.py` — Script principal que baixa o PDF, extrai texto e tabelas, e salva os dados localmente.
-- `texto_monitoramento.txt` — Texto extraído do relatório (gerado após execução do script).
-- `tabelas_extraidas/` — Pasta que contém os arquivos CSV das tabelas extraídas do PDF.
+- `texto_monitoramento.txt` — Arquivo gerado automaticamente contendo o texto extraído do relatório.
+- `tabelas_extraidas/` — Pasta contendo arquivos CSV com tabelas extraídas do relatório.
 
 ---
 
