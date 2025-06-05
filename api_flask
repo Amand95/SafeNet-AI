@@ -1,0 +1,36 @@
+from flask import Flask, request, jsonify
+import cx_Oracle
+
+app = Flask(__name__)
+
+# Configurações de conexão Oracle
+dsn = cx_Oracle.makedsn("57.154.50.104", "1521", service_name="FREEPDB1")
+conn = cx_Oracle.connect(user="dev_admin", password="AdminDev123", dsn=dsn)
+cursor = conn.cursor()
+
+@app.route('/send-data', methods=['POST'])
+def receive_data():
+    data = request.get_json()
+
+    sensor_id = data.get('sensor_id')
+    temperatura = data.get('temperatura')
+    umidade = data.get('umidade')
+    vibracao = data.get('vibracao')
+    timestamp = data.get('timestamp')  # formato: "YYYY-MM-DD HH:MM:SS"
+
+    insert_sql = """
+        INSERT INTO sensores_dados (sensor_id, temperatura, umidade, vibracao, data_registro)
+        VALUES (:1, :2, :3, :4, TO_DATE(:5, 'YYYY-MM-DD HH24:MI:SS'))
+    """
+
+    cursor.execute(insert_sql, (sensor_id, temperatura, umidade, vibracao, timestamp))
+    conn.commit()
+
+    return jsonify({"message": "Dados inseridos com sucesso!"}), 200
+
+@app.route('/')
+def home():
+    return "API Flask SafeNet-AI está rodando!"
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
