@@ -1,67 +1,53 @@
 import requests
-import pdfplumber
 import pandas as pd
 import os
 
-PDF_URL = 'https://www.gov.br/cemaden/pt-br/assuntos/monitoramento/monitoramento-de-seca-para-o-brasil/monitoramento-de-secas-e-impactos-no-brasil-2013-maio-2025/@@download/file/Monitoramento_Seca_Maio_2025.pdf'
-PDF_FILE = 'Monitoramento_Seca_Maio_2025.pdf'
+# URL do arquivo Excel (exemplo, ajuste para o arquivo correto do mês desejado)
+XLSX_URL = 'https://github.com/Amand95/SafeNet-AI/raw/main/coleta_dados/cemaden/tabelas_extraidas/Monitoramento_Seca_Abril_2025.xlsx'
+XLSX_FILE = 'Monitoramento_Seca_Abril_2025.xlsx'
 PASTA_CSV = 'tabelas_extraidas/'
 
-def baixar_pdf(url: str, nome_arquivo: str):
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0 Safari/537.36"
-    }
+def baixar_xlsx(url: str, nome_arquivo: str):
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url)
         response.raise_for_status()
         with open(nome_arquivo, 'wb') as f:
             f.write(response.content)
-        print("✅ PDF baixado com sucesso!")
+        print("✅ XLSX baixado com sucesso!")
     except Exception as e:
-        print(f"❌ Erro ao baixar PDF: {e}")
+        print(f"❌ Erro ao baixar XLSX: {e}")
 
-def extrair_texto_e_tabelas(nome_arquivo: str):
+def extrair_tabelas_xlsx(nome_arquivo: str):
     try:
-        with pdfplumber.open(nome_arquivo) as pdf:
-            all_text = ""
-            tables = []
-            for i, page in enumerate(pdf.pages):
-                text = page.extract_text()
-                if text:
-                    all_text += f"\n--- Página {i+1} ---\n" + text
-
-                table = page.extract_table()
-                if table:
-                    tables.append(table)
-        return all_text, tables
+        # Lê todas as planilhas do arquivo Excel em um dicionário {nome_planilha: DataFrame}
+        xls = pd.ExcelFile(nome_arquivo)
+        tabelas = {}
+        for sheet_name in xls.sheet_names:
+            df = pd.read_excel(xls, sheet_name=sheet_name)
+            tabelas[sheet_name] = df
+        return tabelas
     except Exception as e:
-        print(f"❌ Erro ao extrair dados do PDF: {e}")
-        return None, None
+        print(f"❌ Erro ao extrair tabelas do XLSX: {e}")
+        return None
 
-def salvar_arquivos(texto: str, tabelas: list):
-    if texto:
-        with open('texto_monitoramento.txt', 'w', encoding='utf-8') as f:
-            f.write(texto)
-        print("✅ Texto extraído e salvo em 'texto_monitoramento.txt'.")
-    else:
-        print("⚠️ Texto vazio, não foi salvo.")
-
-    if tabelas and len(tabelas) > 0:
+def salvar_tabelas_csv(tabelas: dict):
+    if tabelas:
         if not os.path.exists(PASTA_CSV):
             os.makedirs(PASTA_CSV)
-        df = pd.DataFrame(tabelas[0][1:], columns=tabelas[0][0])
-        caminho_csv = os.path.join(PASTA_CSV, 'monitoramento_seca.csv')
-        df.to_csv(caminho_csv, index=False)
-        print(f"✅ Primeira tabela salva como '{caminho_csv}'.")
+        for nome, df in tabelas.items():
+            nome_arquivo_csv = os.path.join(PASTA_CSV, f'{nome}.csv')
+            df.to_csv(nome_arquivo_csv, index=False)
+            print(f"✅ Tabela '{nome}' salva como '{nome_arquivo_csv}'.")
     else:
         print("⚠️ Nenhuma tabela encontrada para salvar.")
 
 def main():
-    baixar_pdf(PDF_URL, PDF_FILE)
-    texto, tabelas = extrair_texto_e_tabelas(PDF_FILE)
-    salvar_arquivos(texto, tabelas)
+    baixar_xlsx(XLSX_URL, XLSX_FILE)
+    tabelas = extrair_tabelas_xlsx(XLSX_FILE)
+    salvar_tabelas_csv(tabelas)
 
 if __name__ == "__main__":
     main()
+
 
 
