@@ -49,7 +49,8 @@ O **SafeNet AI** é uma solução inteligente que utiliza sensores embarcados co
 
 Acesse o painel de visualização em tempo real:
 
-🔗 [http://57.154.50.104:8506/](http://57.154.50.104:8506/)
+🔗 [http://trabalhogs.westus3.cloudapp.azure.com:8502/](http://trabalhogs.westus3.cloudapp.azure.com:8502/)
+
 
 Este painel exibe:
 - Leituras dos sensores (temperatura, umidade, movimento)
