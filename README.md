@@ -69,6 +69,24 @@ Você pode testar a simulação do circuito ESP32 com DHT22 clicando no link aba
 
 ---
 
+⚙️ Lógica do Código ESP32
+O código C++ foi desenvolvido para simular um sistema de monitoramento de desastres naturais com base em sensores conectados ao ESP32.
+
+Principais funções:
+Leitura dos sensores:
+O sensor DHT22 coleta temperatura e umidade do ambiente, enquanto o sensor de vibração simula tremores sísmicos.
+
+Ação sobre o relé virtual:
+Um relé é acionado automaticamente quando os dados indicam condições críticas, como:
+
+Temperatura > 35°C
+
+Vibração detectada
+
+Umidade acima ou abaixo de limiares pré-definidos
+
+---
+
 ## 🛠️ Tecnologias Utilizadas
 
 | Tecnologia      | Uso Principal                                 |
