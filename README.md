@@ -64,6 +64,9 @@ Você pode testar a simulação do circuito ESP32 com DHT22 clicando no link aba
 
 [Simulação Wokwi - ESP32 com DHT22](https://wokwi.com/projects/432958048477552641)
 
+### 🖼️ Diagrama do Circuito  
+![Circuito Simulado no Wokwi](./esp32/esp32.JPG)
+
 ---
 
 ## 🛠️ Tecnologias Utilizadas
