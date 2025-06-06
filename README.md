@@ -70,21 +70,63 @@ Você pode testar a simulação do circuito ESP32 com DHT22 clicando no link aba
 ---
 
 ⚙️ Lógica do Código ESP32
+
 O código C++ foi desenvolvido para simular um sistema de monitoramento de desastres naturais com base em sensores conectados ao ESP32.
 
-Principais funções:
-Leitura dos sensores:
-O sensor DHT22 coleta temperatura e umidade do ambiente, enquanto o sensor de vibração simula tremores sísmicos.
+**Principais funções:**
 
-Ação sobre o relé virtual:
-Um relé é acionado automaticamente quando os dados indicam condições críticas, como:
+- **Leitura dos sensores:** O sensor DHT22 coleta temperatura e umidade do ambiente, enquanto o sensor de vibração simula tremores sísmicos.
+- **Ação sobre o relé virtual:** Um relé é acionado automaticamente quando os dados indicam condições críticas, como:
+  - Temperatura > 35°C
+  - Vibração detectada
+  - Umidade acima ou abaixo de limiares pré-definidos
+    
+---
 
-Temperatura > 35°C
+📁 Justificativa da Estrutura do Banco de Dados (MER)
 
-Vibração detectada
+A estrutura do banco de dados foi baseada no Modelo Entidade-Relacionamento (MER) construído na Fase 2, com o objetivo de organizar e relacionar eficientemente os dados captados pelos sensores.
 
-Umidade acima ou abaixo de limiares pré-definidos
+- A tabela `sensor` armazena o tipo e unidade de cada sensor.
+- A tabela `localizacao` identifica a origem das leituras.
+- A tabela `leitura_sensor` guarda os dados captados, ligados ao sensor e ao local.
+- A tabela `alerta` registra os eventos críticos gerados com base nas leituras.
 
+Essa estrutura permite rastrear eventos ambientais em tempo real, realizar análises históricas e alimentar modelos de IA. A modelagem também facilita a realização de operações CRUD e garante flexibilidade para futuras expansões do sistema.
+
+---
+
+📊 Tabelas de Exemplo com Dados Simulados
+
+**Tabela: sensor**
+
+| id_sensor | tipo         | unidade   |
+|-----------|--------------|-----------|
+| 1         | temperatura  | °C        |
+| 2         | umidade      | %         |
+| 3         | vibração     | binário   |
+
+**Tabela: localizacao**
+
+| id_local | nome_estacao      | cidade       |
+|----------|-------------------|--------------|
+| 1        | Estação Leste     | São Paulo    |
+| 2        | Estação Norte     | Campinas     |
+
+**Tabela: leitura_sensor**
+
+| id_leitura | id_sensor | id_local | valor | data_hora           |
+|------------|-----------|----------|--------|---------------------|
+| 1          | 1         | 1        | 36.5   | 2025-06-06 08:00:00 |
+| 2          | 2         | 1        | 82     | 2025-06-06 08:00:00 |
+| 3          | 3         | 1        | 1      | 2025-06-06 08:00:00 |
+
+**Tabela: alerta**
+
+| id_alerta | id_leitura | tipo_alerta          | nivel  |
+|-----------|------------|----------------------|--------|
+| 1         | 1          | Temperatura Elevada  | Crítico|
+| 2         | 3          | Vibração Detectada   | Médio  |
 ---
 
 ## 🛠️ Tecnologias Utilizadas
