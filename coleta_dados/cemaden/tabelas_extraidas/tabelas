@@ -1,10 +1,3 @@
-"""
-Script para baixar e extrair dados do relatório de monitoramento de seca do CEMADEN (maio 2025).
-
-- Baixa o PDF automaticamente.
-- Extrai texto e tabelas.
-- Salva em arquivos CSV e TXT para análise.
-
 import requests
 import pdfplumber
 import pandas as pd
@@ -15,8 +8,11 @@ PDF_FILE = 'Monitoramento_Seca_Maio_2025.pdf'
 PASTA_CSV = 'tabelas_extraidas/'
 
 def baixar_pdf(url: str, nome_arquivo: str):
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0 Safari/537.36"
+    }
     try:
-        response = requests.get(url)
+        response = requests.get(url, headers=headers)
         response.raise_for_status()
         with open(nome_arquivo, 'wb') as f:
             f.write(response.content)
@@ -51,7 +47,6 @@ def salvar_arquivos(texto: str, tabelas: list):
         print("⚠️ Texto vazio, não foi salvo.")
 
     if tabelas and len(tabelas) > 0:
-        # Cria pasta se não existir
         if not os.path.exists(PASTA_CSV):
             os.makedirs(PASTA_CSV)
         df = pd.DataFrame(tabelas[0][1:], columns=tabelas[0][0])
@@ -68,4 +63,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
