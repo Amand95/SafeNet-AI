@@ -44,6 +44,20 @@ O **SafeNet AI** é uma solução inteligente que utiliza sensores embarcados co
 - Acesso via desktop ou mobile (responsivo).
 
 ---
+
+## 🌐 Acesso ao Dashboard Streamlit
+
+Acesse o painel de visualização em tempo real:
+
+🔗 [http://57.154.50.104:8506/](http://57.154.50.104:8506/)
+
+Este painel exibe:
+- Leituras dos sensores (temperatura, umidade, movimento)
+- Gráficos em tempo real
+- Análises fornecidas pela IA via Azure
+  
+---  
+
 #### Simulação no Wokwi
 
 Você pode testar a simulação do circuito ESP32 com DHT22 clicando no link abaixo:
